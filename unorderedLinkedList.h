@@ -8,6 +8,7 @@ using namespace std;
 template <class Type> 
 class unorderedLinkedList: public linkedListType<Type>
 {
+protected:
 using linkedListType<Type>::head;
 using linkedListType<Type>::tail;
 using linkedListType<Type>::count;

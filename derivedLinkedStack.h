@@ -12,6 +12,7 @@ template<class Type>
 class linkedStackType: public unorderedLinkedList<Type>
 {
 public:
+    const linkedStackType<Type>& operator=(const linkedStackType<Type>& otherStack);
     void initializeStack();
     bool isEmptyStack() const;
     bool isFullStack() const;
@@ -20,6 +21,17 @@ public:
     void pop();
     bool operator==(const linkedStackType<Type>& otherStack) const;
 };
+
+template<class Type>
+const linkedStackType<Type>& linkedStackType<Type>::operator=(const linkedStackType<Type>& otherStack)
+{
+    if (this != &otherStack)
+    {
+        linkedListType<Type>::operator=(otherStack);
+    }
+
+    return *this;
+}
 
 template<class Type>
 void linkedStackType<Type>::initializeStack()
@@ -56,26 +68,39 @@ void linkedStackType<Type>::pop()
 {
     nodeType<Type> *temp;
 
-    temp = first;
-    first = first->link;
-    delete temp;
+    if (this->head != nullptr)
+    {
+        temp = this->head;
+        this->head = this->head->next;
+        delete temp;
+        this->count--;
+
+        if (this->head == nullptr)
+        {
+            this->tail = nullptr;
+        }
+    }
+    else
+    {
+        cout << "Cannot remove from an empty stack." << endl;
+    }
 }
 
 template<class Type>
 bool linkedStackType<Type>::operator==(const linkedStackType<Type>& otherStack) const
 {
-    nodeType<Type> *current1 = this->first;
-    nodeType<Type> *current2 = otherStack.first;
+    nodeType<Type> *current1 = this->head;
+    nodeType<Type> *current2 = otherStack.head;
 
     while (current1 != nullptr && current2 != nullptr)
     {
-        if (current1->info != current2->info)
+        if (current1->data != current2->data)
         {
             return false;
         }
 
-        current1 = current1->link;
-        current2 = current2->link;
+        current1 = current1->next;
+        current2 = current2->next;
     }
 
     return (current1 == nullptr && current2 == nullptr);
