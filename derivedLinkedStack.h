@@ -18,6 +18,7 @@ public:
     void push(const Type& newItem);
     Type top() const;
     void pop();
+    bool operator==(const linkedStackType<Type>& otherStack) const;
 };
 
 template<class Type>
@@ -58,6 +59,26 @@ void linkedStackType<Type>::pop()
     temp = first;
     first = first->link;
     delete temp;
+}
+
+template<class Type>
+bool linkedStackType<Type>::operator==(const linkedStackType<Type>& otherStack) const
+{
+    nodeType<Type> *current1 = this->first;
+    nodeType<Type> *current2 = otherStack.first;
+
+    while (current1 != nullptr && current2 != nullptr)
+    {
+        if (current1->info != current2->info)
+        {
+            return false;
+        }
+
+        current1 = current1->link;
+        current2 = current2->link;
+    }
+
+    return (current1 == nullptr && current2 == nullptr);
 }
 
 #endif
